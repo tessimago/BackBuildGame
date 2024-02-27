@@ -470,7 +470,7 @@ MonoBehaviour:
   yGenDOWN: 0
   yRef_UP: 3
   yRef_DOWN: -3
-  changedDirection: 0
+  midChanceDec: 2
 --- !u!1 &1944443297
 GameObject:
   m_ObjectHideFlags: 0
