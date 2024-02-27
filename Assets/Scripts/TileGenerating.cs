@@ -5,18 +5,22 @@ public class TileGenerating : MonoBehaviour
 {
     public GameObject player;
     public Tilemap tilemap;
+    public Tilemap tileBackground;
     public Tile wall;
-    public Tile floor;
+    public Tile[] floor;
+    public Tile[] corners;
 
     public int xGen;
     public int yGenUP;
     public int yGenDOWN;
     public int yRef_UP;
     public int yRef_DOWN;
-    public float midChanceDec = 2f;
+    public float midChance = 0.5f;
     float speedGen = 0.1f;
     bool changedDirection_UP;
     bool changedDirection_DOWN;
+    public int simulatedMid = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -55,7 +59,7 @@ public class TileGenerating : MonoBehaviour
             changedDirection_DOWN = false;
             generateTile_DOWN();
         }else{
-            yGenDOWN += chooseDir(yGenUP, false);
+            yGenDOWN += chooseDir(yGenDOWN, false);
             generateTile_DOWN();
         }
     }
@@ -64,9 +68,7 @@ public class TileGenerating : MonoBehaviour
         int direction = 0;
         // go mid or no?
         float random = Random.Range(0f, 1f);
-        // Chance de gerar no meio
-        Debug.Log("Chance de gerar no meio: " + MidChance(yGen));
-        Debug.Log("random: " + random);
+        // Chance to go to the middle
         if(random > MidChance(yGen)){
             // failed to go mid, now go up or down?
             random = Random.Range(0f, 1f);
@@ -92,12 +94,40 @@ public class TileGenerating : MonoBehaviour
             posUP.y += 1;
             yGenUP += 1;
         }
-
+        // Set the correct tiles depending on their positioning
         tilemap.SetTile(posUP, wall);
-        if(tilemap.GetTile(previousTile(posUP)) == null)
-            tilemap.SetTile(previousTile(posUP), wall);
-    }
+        if(tilemap.GetTile(previousTile(posUP)) == null){
+            if(tilemap.GetTile(previousTile(posUP + Vector3Int.down)) != null){
+                tilemap.SetTile(previousTile(posUP), corners[1]);
+                tilemap.SetTile(previousTile(posUP + Vector3Int.down), corners[3]);
+            }
+            else{
+                tilemap.SetTile(previousTile(posUP), corners[2]);
+                tilemap.SetTile(previousTile(posUP + Vector3Int.up), corners[0]);
+            }
+        }
 
+        // Generate the floor
+        int i = 0;
+        posUP.y -= 1;
+        posUP.x -= 1;
+        while(tilemap.GetTile(posUP) == null || i <= 1){
+            Debug.Log("Floor set");
+            tileBackground.SetTile(posUP, pickFloor());
+            posUP.y -= 1;
+            i++;
+            if(i > 15){
+                break;
+            }
+        }
+    }
+    Tile pickFloor(){
+        if(Random.Range(0f, 1f) < 0.95f){
+            return floor[0];
+        }
+        // Else return one of the others
+        return floor[Random.Range(1, floor.Length)];
+    }
     void generateTile_DOWN(){
         Vector3Int posDown = new Vector3Int(xGen, yGenDOWN + yRef_DOWN, 0);
         // Verify if it is closing the path
@@ -106,10 +136,18 @@ public class TileGenerating : MonoBehaviour
             posDown.y += -1;
             yGenDOWN += -1;
         }
-
+        // Set the correct tiles depending on their positioning 
         tilemap.SetTile(posDown, wall);
-        if(tilemap.GetTile(previousTile(posDown)) == null)
-            tilemap.SetTile(previousTile(posDown), wall);
+        if(tilemap.GetTile(previousTile(posDown)) == null){
+            if(tilemap.GetTile(previousTile(posDown + Vector3Int.down)) != null){
+                tilemap.SetTile(previousTile(posDown), corners[1]);
+                tilemap.SetTile(previousTile(posDown + Vector3Int.down), corners[3]);
+            }
+            else{
+                tilemap.SetTile(previousTile(posDown), corners[2]);
+                tilemap.SetTile(previousTile(posDown + Vector3Int.up), corners[0]);
+            }
+        }
 
     }
 
@@ -137,19 +175,23 @@ public class TileGenerating : MonoBehaviour
         }
     }
 
-    float MidChance(int x){
-        return 0.75f * Mathf.Pow(midChanceDec,-Mathf.Abs(x));
+    float MidChance(int y){
+        if(midChance > 1f)
+            midChance = 1f;
+        else if(midChance < 0f)
+            midChance = 0f;
+        
+        return - Mathf.Abs(Mathf.Atan(y - simulatedMid) * 2 * midChance/Mathf.PI) + midChance;
     }
-    float upChance(int x){
-        if(x >= 0)
-            return 0.5f * Mathf.Pow(2, -x);
-        else
-            return 0.5f + 0.5f * Mathf.Pow(2, x);
+    // The more u up, less chance to go up and vice versa
+    float upChance(int y){
+        return - (Mathf.Atan(y - simulatedMid)/Mathf.PI) + 0.5f;
     }
     void Update()
     {
-        if(player.transform.position.x > xGen - 10){
+        if(player.transform.position.x > xGen - 15){
             generate();
+            //simulatedMid = Mathf.RoundToInt(5*Mathf.Sin(xGen * Mathf.PI/20));
         }
     }
 }
