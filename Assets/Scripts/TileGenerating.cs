@@ -3,10 +3,12 @@ using UnityEngine.Tilemaps;
 
 public class TileGenerating : MonoBehaviour
 {
+    public GameObject enemy;
     public GameObject player;
     public Tilemap tilemap;
     public Tilemap tileBackground;
     public Tile wall;
+    public Tile defaultWall;
     public Tile[] floor;
     public Tile[] corners;
 
@@ -30,7 +32,7 @@ public class TileGenerating : MonoBehaviour
         xGen = 0;
         yGenUP = 0;
         yGenDOWN = 0;
-
+        generateStartWall();
     }
 
     void generate(){
@@ -43,7 +45,7 @@ public class TileGenerating : MonoBehaviour
     void generateUP(){
         // Se mudou de direçao ao gerar, gera outro em frente
         // para ficar mais bonito
-        if(changedDirection_UP){ 
+        if(changedDirection_UP || xGen <= 2){ 
             changedDirection_UP = false;
             generateTile_UP();
         }else{
@@ -55,7 +57,7 @@ public class TileGenerating : MonoBehaviour
     void generateDOWN(){
         // Se mudou de direçao ao gerar, gera outro em frente
         // para ficar mais bonito
-        if(changedDirection_DOWN){ 
+        if(changedDirection_DOWN || xGen <= 2){ 
             changedDirection_DOWN = false;
             generateTile_DOWN();
         }else{
@@ -112,13 +114,21 @@ public class TileGenerating : MonoBehaviour
         posUP.y -= 1;
         posUP.x -= 1;
         while(tilemap.GetTile(posUP) == null || i <= 1){
-            Debug.Log("Floor set");
             tileBackground.SetTile(posUP, pickFloor());
+            // Chance to spawn enemy
+            float random = Random.Range(0f, 1f);
+            if(random < 0.01f && xGen > 30){
+                Vector3Int cellPosition = tilemap.WorldToCell(posUP);
+                Instantiate(enemy, cellPosition, Quaternion.identity);
+            }
+            
             posUP.y -= 1;
-            i++;
-            if(i > 15){
+            if(xGen == 0 && i >= (yRef_UP-yRef_DOWN)){ // Trying to get the correct number of floors os the start
+                break;
+            }else if(i > 50){ // Just to ensure the game doesn't get stuck in an infinite loop
                 break;
             }
+            i++;
         }
     }
     Tile pickFloor(){
@@ -150,7 +160,13 @@ public class TileGenerating : MonoBehaviour
         }
 
     }
-
+    void generateStartWall(){
+        int i = yRef_UP+1;
+        while(i > yRef_DOWN-2){
+            tilemap.SetTile(new Vector3Int(-1, i, 0), defaultWall);
+            i--;
+        }
+    }
     Vector3Int previousTile(Vector3Int pos){
         return new Vector3Int(pos.x - 1, pos.y, 0);
     }
