@@ -21,6 +21,15 @@ public class PlayerMov : MonoBehaviour
         
         //Move the player
         rb.velocity = new Vector2(x, y) * speed;
+
+        // Rotate looking at the mouse
+        Vector3 mousePos = Input.mousePosition;
+        //Screen to world
+        mousePos = Camera.main.ScreenToWorldPoint(mousePos);
+        mousePos.z = 0;
+        transform.up = mousePos - transform.position;
+
+
     }
 
     // All Physic related stuff eventually

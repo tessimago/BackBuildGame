@@ -22,6 +22,7 @@ public class TileGenerating : MonoBehaviour
     bool changedDirection_UP;
     bool changedDirection_DOWN;
     public int simulatedMid = 0;
+    public float enemySpawnChance = 0.01f;
 
     // Start is called before the first frame update
     void Start()
@@ -117,7 +118,7 @@ public class TileGenerating : MonoBehaviour
             tileBackground.SetTile(posUP, pickFloor());
             // Chance to spawn enemy
             float random = Random.Range(0f, 1f);
-            if(random < 0.01f && xGen > 30){
+            if(random < enemySpawnChance && xGen > 30){
                 Vector3Int cellPosition = tilemap.WorldToCell(posUP);
                 Instantiate(enemy, cellPosition, Quaternion.identity);
             }
