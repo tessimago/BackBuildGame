@@ -5,9 +5,14 @@ using UnityEngine;
 public class ShootScript : MonoBehaviour
 {
     float speed = 25f;
+    int bulletDamage = 15;
+    float knockbackForce = 2f;
+    GameObject player;
     // Start is called before the first frame update
     void Start()
     {
+        
+        player = GameObject.Find("Player");
         Destroy(gameObject, 3);
     }
 
@@ -23,7 +28,9 @@ public class ShootScript : MonoBehaviour
         }
         if(other.gameObject.tag == "Enemy"){
             Destroy(gameObject);
-            Destroy(other.gameObject);
+            // Get enemy ui
+            Vector2 knockbackDirection = (other.transform.position - player.transform.position).normalized;
+            other.gameObject.GetComponent<EnemyStats>().takeDamage(bulletDamage, knockbackDirection * knockbackForce);
         }
     }
 }
