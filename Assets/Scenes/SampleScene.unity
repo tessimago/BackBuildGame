@@ -771,7 +771,7 @@ MonoBehaviour:
   yGenDOWN: 0
   yRef_UP: 5
   yRef_DOWN: -5
-  midChance: 0.5
+  midChance: 0.75
   simulatedMid: 0
   enemySpawnChance: 0.01
 --- !u!1 &1845204960
@@ -996,6 +996,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bullet: {fileID: 3589289913968344355, guid: 519ab31374f8c674fb19ff6541c82566, type: 3}
+  canShoot: 1
+  shootDelay: 0.26
+  spreadVar: 5
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -16,7 +16,7 @@ public class FixHealthBarPos : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.rotation = cam.transform.rotation;
+        transform.parent.rotation = cam.transform.rotation;
         transform.position = target.position + new Vector3(0, 1, 0);
     }
 }
