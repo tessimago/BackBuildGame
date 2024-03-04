@@ -7,11 +7,13 @@ public class EnemyBehaviour : MonoBehaviour
 {
     GameObject player;
     Rigidbody2D rb;
+    public int damage;
 
     public bool canAttack;
     // Start is called before the first frame update
     void Start()
     {
+        damage = 10;
         canAttack = true;
         player = GameObject.Find("Player");
         rb = GetComponent<Rigidbody2D>();
@@ -39,8 +41,9 @@ public class EnemyBehaviour : MonoBehaviour
             angle += 180;
         transform.rotation = Quaternion.Euler(0, 0, angle);
     }
-    IEnumerator attacked(){
+    IEnumerator attacked(GameObject player){
         canAttack = false;
+        player.GetComponent<PlayerStats>().TakeDamage(damage);
         yield return new WaitForSeconds(3);
         canAttack = true;
     }
@@ -52,7 +55,7 @@ public class EnemyBehaviour : MonoBehaviour
             rb.AddForce(force, ForceMode2D.Impulse);
             Rigidbody2D playerRb = collision.gameObject.GetComponent<Rigidbody2D>();
             playerRb.AddForce(-force, ForceMode2D.Impulse);
-            StartCoroutine(attacked());
+            StartCoroutine(attacked(collision.gameObject));
         }
     }
 }

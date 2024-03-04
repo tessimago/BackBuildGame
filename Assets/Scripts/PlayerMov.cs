@@ -27,7 +27,6 @@ public class PlayerMov : MonoBehaviour
         y = Input.GetAxis("Vertical");
         speedControl();
         lookToMouse();
-        Debug.Log("Speed: "+ rb.velocity.magnitude);
     }
 
     void lookToMouse(){
