@@ -11,10 +11,12 @@ public class PlayerStats : MonoBehaviour
     public int maxHealth;
     public TextMeshProUGUI scoreText;
     public int score;
+
     // Start is called before the first frame update
     void Start()
     {
         Time.timeScale = 1f;
+        GetComponent<Rigidbody2D>().interpolation = RigidbodyInterpolation2D.None;
         score = 0;
         scoreText.text = "Score: " + score;
         maxHealth = 100;
@@ -69,6 +71,7 @@ public class PlayerStats : MonoBehaviour
 
     public void GameOver(){
         Time.timeScale = 0.1f;
+        GetComponent<Rigidbody2D>().interpolation = RigidbodyInterpolation2D.Interpolate;
         GameManager.gameState = GameManager.GAME_STATE.GAME_OVER;
         gameOverScreen.SetActive(true);
     }
