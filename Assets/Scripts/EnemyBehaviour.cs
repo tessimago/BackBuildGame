@@ -10,9 +10,12 @@ public class EnemyBehaviour : MonoBehaviour
     public int damage;
 
     public bool canAttack;
+
+    public float speed;
     // Start is called before the first frame update
     void Start()
     {
+        speed = 5;
         damage = 10;
         canAttack = true;
         player = GameObject.Find("Player");
@@ -28,7 +31,8 @@ public class EnemyBehaviour : MonoBehaviour
     }
     void walkToPlayer(){
         transform.position = Vector2.MoveTowards(
-                                transform.position, player.transform.position, 5 * Time.deltaTime);
+                transform.position, player.transform.position, speed * Time.deltaTime);
+        speed += Time.deltaTime;
     }
     void lookToPlayer()
     {
@@ -50,6 +54,7 @@ public class EnemyBehaviour : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if(collision.gameObject.tag == "Player"){
+            speed = 5;
             var forceDir = (transform.position - collision.transform.position).normalized;
             var force = new Vector2(forceDir.x, forceDir.y) * 5;
             rb.AddForce(force, ForceMode2D.Impulse);

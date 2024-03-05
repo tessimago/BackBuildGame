@@ -20,6 +20,9 @@ public class PlayerMov : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(GameManager.gameState == GameManager.GAME_STATE.GAME_OVER)
+            return;
+            
         realSpeed = speed * rb.drag;
 
         //Player input axis
