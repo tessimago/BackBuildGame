@@ -15,6 +15,9 @@ public class EnemyStats : MonoBehaviour
 
     // Physics
     Rigidbody2D rb;
+
+    // Drops
+    public GameObject drop;
     
     // Start is called before the first frame update
     void Start()
@@ -36,6 +39,8 @@ public class EnemyStats : MonoBehaviour
         // Apply a knockback force to the enemy
         rb.AddForce(knockback, ForceMode2D.Impulse);
         if(health <= 0){
+            for(int i = 0; i < 3; i++)
+                Instantiate(drop, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
     }

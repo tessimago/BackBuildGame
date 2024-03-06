@@ -10,7 +10,10 @@ public class PlayerStats : MonoBehaviour
     public int health;
     public int maxHealth;
     public TextMeshProUGUI scoreText;
+
+    public TextMeshProUGUI bestScoreText;
     public int score;
+    public int bestScore;
 
     // Start is called before the first frame update
     void Start()
@@ -18,6 +21,7 @@ public class PlayerStats : MonoBehaviour
         Time.timeScale = 1f;
         GetComponent<Rigidbody2D>().interpolation = RigidbodyInterpolation2D.None;
         score = 0;
+        bestScore = PlayerPrefs.GetInt("BestScore", 0);
         scoreText.text = "Score: " + score;
         maxHealth = 100;
         health = maxHealth;
@@ -34,6 +38,9 @@ public class PlayerStats : MonoBehaviour
 
         score = Mathf.Max((int) transform.position.x - 10, score);
         scoreText.text = "Score: " + score;
+        if(score > bestScore){
+            bestScore = score;
+        }
     }
     public void TakeDamage(int damage){
         health -= damage;
@@ -42,22 +49,11 @@ public class PlayerStats : MonoBehaviour
             health = 0;
         }
         updateBar();
-
-        // Overcomplicated code to go from green to yellow to red that does the same
-        /*
-        if(healthBar.fillAmount >= 0.5f){
-        healthBar.color = new Vector4(2*(1-healthBar.fillAmount),
-                                      healthBar.color.g,
-                                      healthBar.color.b,
-                                      1);
-        }
-        else{
-            healthBar.color = new Vector4(healthBar.color.r,
-                                          healthBar.fillAmount*2,
-                                          healthBar.color.b,
-                                          1);
-        }
-        */
+    }
+    public void Heal(int heal){
+        health += heal;
+        health = Mathf.Min(health, maxHealth);
+        updateBar();
     }
     void updateBar(){
         healthBar.fillAmount = (float)health / maxHealth;
@@ -74,6 +70,8 @@ public class PlayerStats : MonoBehaviour
         GetComponent<Rigidbody2D>().interpolation = RigidbodyInterpolation2D.Interpolate;
         GameManager.gameState = GameManager.GAME_STATE.GAME_OVER;
         gameOverScreen.SetActive(true);
+        bestScoreText.text = "Best Score: " + bestScore;
+        PlayerPrefs.SetInt("BestScore", score);
     }
 
 }

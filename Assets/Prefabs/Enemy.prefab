@@ -525,6 +525,7 @@ MonoBehaviour:
   damage: 10
   speed: 10
   score: 10
+  drop: {fileID: 5076067645375084966, guid: 08a36c5567d68824e8a055db7e410046, type: 3}
 --- !u!114 &-7420819738450256020
 MonoBehaviour:
   m_ObjectHideFlags: 0
