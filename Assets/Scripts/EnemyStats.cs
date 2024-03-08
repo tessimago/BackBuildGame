@@ -4,11 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 public class EnemyStats : MonoBehaviour
 {
-    public int health = 100;
-    public int maxHealth = 100;
-    public int damage = 10;
-    public int speed = 10;
-    public int score = 10;
+    int health;
+    int maxHealth;
     
     // UI
     Slider healthBar;
@@ -22,9 +19,15 @@ public class EnemyStats : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+    }
+
+    public void initialize(int maxH){
         healthBar = GetComponentInChildren<Slider>();
-        healthBar.maxValue = maxHealth;
         rb = GetComponent<Rigidbody2D>();
+        maxHealth = maxH;
+        healthBar.maxValue = maxHealth;
+        healthBar.value = maxHealth;
+        health = maxHealth;
     }
 
     // Update is called once per frame

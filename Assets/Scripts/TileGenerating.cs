@@ -3,7 +3,7 @@ using UnityEngine.Tilemaps;
 
 public class TileGenerating : MonoBehaviour
 {
-    public GameObject enemy;
+    public EnemyGenerator enemyGen;
     public GameObject player;
     public Tilemap tilemap;
     public Tilemap tileBackground;
@@ -27,6 +27,8 @@ public class TileGenerating : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        enemyGen = GameObject.Find("EnemyGenerator").GetComponent<EnemyGenerator>();
+        Debug.Log(enemyGen);
         player = GameObject.Find("Player");
         changedDirection_UP = false;
         changedDirection_DOWN = false;
@@ -120,7 +122,8 @@ public class TileGenerating : MonoBehaviour
             float random = Random.Range(0f, 1f);
             if(random < enemySpawnChance && xGen > 30){
                 Vector3Int cellPosition = tilemap.WorldToCell(posUP);
-                Instantiate(enemy, cellPosition, Quaternion.identity);
+                Debug.Log(enemyGen);
+                enemyGen.spawnRandomEnemy(cellPosition);
             }
             
             posUP.y -= 1;

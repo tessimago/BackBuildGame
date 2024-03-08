@@ -9,14 +9,12 @@ public class EnemyBehaviour : MonoBehaviour
     Rigidbody2D rb;
     public int damage;
 
-    public bool canAttack;
-
     public float speed;
+
+    public bool canAttack;
     // Start is called before the first frame update
     void Start()
     {
-        speed = 5;
-        damage = 10;
         canAttack = true;
         player = GameObject.Find("Player");
         rb = GetComponent<Rigidbody2D>();
