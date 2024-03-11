@@ -14,12 +14,14 @@ public class PlayerStats : MonoBehaviour
     public TextMeshProUGUI bestScoreText;
     public int score;
     public int bestScore;
+    public Rigidbody2D rb;
 
     // Start is called before the first frame update
     void Start()
     {
         Time.timeScale = 1f;
-        GetComponent<Rigidbody2D>().interpolation = RigidbodyInterpolation2D.None;
+        rb = GetComponent<Rigidbody2D>();
+        rb.interpolation = RigidbodyInterpolation2D.None;
         score = 0;
         bestScore = PlayerPrefs.GetInt("BestScore", 0);
         scoreText.text = "Score: " + score;
@@ -42,8 +44,10 @@ public class PlayerStats : MonoBehaviour
             bestScore = score;
         }
     }
-    public void TakeDamage(int damage){
+    public void TakeDamage(int damage, Vector2 knockback){
         health -= damage;
+        // Apply a knockback force to the enemy
+        rb.AddForce(knockback, ForceMode2D.Impulse);
         if(health <= 0){
             GameOver();
             health = 0;
@@ -67,7 +71,7 @@ public class PlayerStats : MonoBehaviour
 
     public void GameOver(){
         Time.timeScale = 0.1f;
-        GetComponent<Rigidbody2D>().interpolation = RigidbodyInterpolation2D.Interpolate;
+        rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         GameManager.gameState = GameManager.GAME_STATE.GAME_OVER;
         gameOverScreen.SetActive(true);
         bestScoreText.text = "Best Score: " + bestScore;

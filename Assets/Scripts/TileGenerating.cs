@@ -122,7 +122,6 @@ public class TileGenerating : MonoBehaviour
             float random = Random.Range(0f, 1f);
             if(random < enemySpawnChance && xGen > 30){
                 Vector3Int cellPosition = tilemap.WorldToCell(posUP);
-                Debug.Log(enemyGen);
                 enemyGen.spawnRandomEnemy(cellPosition);
             }
             
@@ -211,6 +210,9 @@ public class TileGenerating : MonoBehaviour
     {
         if(player.transform.position.x > xGen - 15){
             generate();
+            if(xGen % 200 == 0){
+                simulatedMid += Random.Range(-5, 5);
+            }
             //simulatedMid = Mathf.RoundToInt(5*Mathf.Sin(xGen * Mathf.PI/20));
         }
     }

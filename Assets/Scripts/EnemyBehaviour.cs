@@ -5,12 +5,16 @@ using UnityEngine;
 
 public class EnemyBehaviour : MonoBehaviour
 {
+    public enum BEHAVIOURS {RUSH, SHOOT};
+    public BEHAVIOURS behaviour;
     GameObject player;
+    public GameObject bullet;
     Rigidbody2D rb;
     public int damage;
 
     public float speed;
-
+    public float bulletSpeed;
+    public float attackSpeed;
     public bool canAttack;
     // Start is called before the first frame update
     void Start()
@@ -25,8 +29,29 @@ public class EnemyBehaviour : MonoBehaviour
     {
         lookToPlayer();
         if(canAttack)
-            walkToPlayer();
+            action();
     }
+
+    void action(){
+        switch( behaviour ){
+            case BEHAVIOURS.RUSH:
+                walkToPlayer();
+                break;
+            case BEHAVIOURS.SHOOT:
+                shootAtPlayer();
+                break;
+        }
+    }
+
+    void shootAtPlayer(){
+        if(Vector2.Distance(transform.position, player.transform.position) > 8){
+            transform.position = Vector2.MoveTowards(
+                transform.position, player.transform.position, speed * Time.deltaTime);
+        }else{
+            StartCoroutine(shoot());
+        }
+    }
+
     void walkToPlayer(){
         transform.position = Vector2.MoveTowards(
                 transform.position, player.transform.position, speed * Time.deltaTime);
@@ -43,10 +68,17 @@ public class EnemyBehaviour : MonoBehaviour
             angle += 180;
         transform.rotation = Quaternion.Euler(0, 0, angle);
     }
+    IEnumerator shoot(){
+        canAttack = false;
+        var b = Instantiate(bullet, transform.position, transform.rotation);
+        b.GetComponent<EnemyShootScript>().bulletSpeed = bulletSpeed;
+        yield return new WaitForSeconds(attackSpeed);
+        canAttack = true;
+    }
     IEnumerator attacked(GameObject player){
         canAttack = false;
-        player.GetComponent<PlayerStats>().TakeDamage(damage);
-        yield return new WaitForSeconds(3);
+        player.GetComponent<PlayerStats>().TakeDamage(damage, Vector2.zero);
+        yield return new WaitForSeconds(attackSpeed);
         canAttack = true;
     }
     private void OnCollisionEnter2D(Collision2D collision)

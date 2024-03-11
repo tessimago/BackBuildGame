@@ -775,6 +775,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabs:
   - {fileID: 8898295420582659955, guid: a092b9eacd3236d4fad996806cd76071, type: 3}
+  - {fileID: 8898295420582659955, guid: 4b3a06ba492f3f846b2a3524c0a29060, type: 3}
 --- !u!1 &730913682
 GameObject:
   m_ObjectHideFlags: 0
@@ -2089,6 +2090,7 @@ MonoBehaviour:
   bestScoreText: {fileID: 744911792}
   score: 0
   bestScore: 0
+  rb: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

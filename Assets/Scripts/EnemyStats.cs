@@ -21,7 +21,7 @@ public class EnemyStats : MonoBehaviour
     {
     }
 
-    public void initialize(int maxH){
+    public void Initialize(int maxH){
         healthBar = GetComponentInChildren<Slider>();
         rb = GetComponent<Rigidbody2D>();
         maxHealth = maxH;
@@ -36,7 +36,7 @@ public class EnemyStats : MonoBehaviour
         
     }
 
-    public void takeDamage(int damage, Vector2 knockback){
+    public void TakeDamage(int damage, Vector2 knockback){
         health -= damage;
         healthBar.value = health;
         // Apply a knockback force to the enemy
