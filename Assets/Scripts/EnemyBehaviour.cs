@@ -14,6 +14,8 @@ public class EnemyBehaviour : MonoBehaviour
 
     public float speed;
     public float bulletSpeed;
+    public float bulletSize;
+    public float range;
     public float attackSpeed;
     public bool canAttack;
     // Start is called before the first frame update
@@ -44,7 +46,7 @@ public class EnemyBehaviour : MonoBehaviour
     }
 
     void shootAtPlayer(){
-        if(Vector2.Distance(transform.position, player.transform.position) > 8){
+        if(Vector2.Distance(transform.position, player.transform.position) > range){
             transform.position = Vector2.MoveTowards(
                 transform.position, player.transform.position, speed * Time.deltaTime);
         }else{
@@ -72,6 +74,7 @@ public class EnemyBehaviour : MonoBehaviour
         canAttack = false;
         var b = Instantiate(bullet, transform.position, transform.rotation);
         b.GetComponent<EnemyShootScript>().bulletSpeed = bulletSpeed;
+        b.transform.localScale = Vector3.one * bulletSize;
         yield return new WaitForSeconds(attackSpeed);
         canAttack = true;
     }

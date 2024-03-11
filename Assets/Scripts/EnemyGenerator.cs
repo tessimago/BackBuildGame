@@ -67,23 +67,10 @@ public abstract class Enemy
         }
     }
 }
-
-public class Enemy_Shooter_Strong : Enemy
-{
-    float bulletSpeed;
-
-
-    public Enemy_Shooter_Strong(GameObject enemyPrefab)
-    {
-        enemy = enemyPrefab;
-        maxHealth = 75;
-        speed = 3;
-        damage = 15;
-        bulletSpeed = 10f;
-        color = Color.red;
-        behaviour = EnemyBehaviour.BEHAVIOURS.SHOOT;
-    }
-
+public abstract class Enemy_Shooter : Enemy{
+    public float bulletSpeed;
+    public float bulletSize = 0.2f;
+    public float range = 8f;
     public override void Set(GameObject e)
     {
         base.Set(e);
@@ -91,6 +78,8 @@ public class Enemy_Shooter_Strong : Enemy
         if (behaviourComponent != null)
         {
             behaviourComponent.bulletSpeed = bulletSpeed;
+            behaviourComponent.bulletSize = bulletSize;
+            behaviourComponent.range = range;
         }
         else
         {
@@ -98,11 +87,24 @@ public class Enemy_Shooter_Strong : Enemy
         }
     }
 }
-
-public class Enemy_Shooter_Standard : Enemy
+public class Enemy_Shooter_Strong : Enemy_Shooter
 {
-    float bulletSpeed;
+    public Enemy_Shooter_Strong(GameObject enemyPrefab)
+    {
+        enemy = enemyPrefab;
+        maxHealth = 75;
+        speed = 3;
+        damage = 15;
+        range = 12f;
+        bulletSpeed = 15f;
+        bulletSize = 0.5f;
+        color = Color.red;
+        behaviour = EnemyBehaviour.BEHAVIOURS.SHOOT;
+    }
+}
 
+public class Enemy_Shooter_Standard : Enemy_Shooter
+{
     public Enemy_Shooter_Standard(GameObject enemyPrefab)
     {
         enemy = enemyPrefab;
@@ -114,25 +116,10 @@ public class Enemy_Shooter_Standard : Enemy
         color = Color.white;
         behaviour = EnemyBehaviour.BEHAVIOURS.SHOOT;
     }
-
-    public override void Set(GameObject e)
-    {
-        base.Set(e);
-        var behaviourComponent = e.GetComponent<EnemyBehaviour>();
-        if (behaviourComponent != null)
-        {
-            behaviourComponent.bulletSpeed = bulletSpeed;
-        }
-        else
-        {
-            Debug.LogError("EnemyBehaviour component not found!");
-        }
-    }
 }
 
-public class Enemy_Shooter_Fast : Enemy
+public class Enemy_Shooter_Fast : Enemy_Shooter
 {
-    float bulletSpeed;
 
     public Enemy_Shooter_Fast(GameObject enemyPrefab)
     {
@@ -144,22 +131,6 @@ public class Enemy_Shooter_Fast : Enemy
         bulletSpeed = 25f;
         color = Color.yellow;
         behaviour = EnemyBehaviour.BEHAVIOURS.SHOOT;
-    }
-
-    public override void Set(GameObject e)
-    {
-        base.Set(e);
-        Debug.Log("Base set");
-        var behaviourComponent = e.GetComponent<EnemyBehaviour>();
-        if (behaviourComponent != null)
-        {
-            Debug.Log("shootSpeed being set");
-            behaviourComponent.bulletSpeed = bulletSpeed;
-        }
-        else
-        {
-            Debug.LogError("EnemyBehaviour component not found!");
-        }
     }
 }
 
