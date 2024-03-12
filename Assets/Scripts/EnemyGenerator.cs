@@ -95,7 +95,7 @@ public class Enemy_Shooter_Strong : Enemy_Shooter
         maxHealth = 75;
         speed = 3;
         damage = 15;
-        range = 12f;
+        range = 20f;
         bulletSpeed = 15f;
         bulletSize = 0.5f;
         color = Color.red;

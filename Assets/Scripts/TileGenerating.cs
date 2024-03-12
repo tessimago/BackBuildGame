@@ -22,7 +22,7 @@ public class TileGenerating : MonoBehaviour
     bool changedDirection_UP;
     bool changedDirection_DOWN;
     public int simulatedMid = 0;
-    public float enemySpawnChance = 0.01f;
+    //public float enemySpawnChance = 0.01f;
 
     // Start is called before the first frame update
     void Start()
@@ -120,7 +120,7 @@ public class TileGenerating : MonoBehaviour
             tileBackground.SetTile(posUP, pickFloor());
             // Chance to spawn enemy
             float random = Random.Range(0f, 1f);
-            if(random < enemySpawnChance && xGen > 30){
+            if(random < level_enemyChance() && xGen > 30){
                 Vector3Int cellPosition = tilemap.WorldToCell(posUP);
                 enemyGen.spawnRandomEnemy(cellPosition);
             }
@@ -206,14 +206,22 @@ public class TileGenerating : MonoBehaviour
     float upChance(int y){
         return - (Mathf.Atan(y - simulatedMid)/Mathf.PI) + 0.5f;
     }
+
+    public int level = 1;
+
     void Update()
     {
         if(player.transform.position.x > xGen - 15){
             generate();
             if(xGen % 200 == 0){
-                simulatedMid += Random.Range(-5, 5);
+                simulatedMid += 25;
+                level += 1;
             }
-            //simulatedMid = Mathf.RoundToInt(5*Mathf.Sin(xGen * Mathf.PI/20));
+
         }
+    }
+
+    float level_enemyChance(){
+        return level / 100f;
     }
 }

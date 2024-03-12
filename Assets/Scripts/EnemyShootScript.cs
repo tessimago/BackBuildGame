@@ -19,10 +19,7 @@ public class EnemyShootScript : MonoBehaviour
         transform.Translate(Vector2.up * Time.deltaTime * bulletSpeed);
     }
     private void OnTriggerEnter2D(Collider2D other) {
-        if(other.gameObject.tag == "Wall")
-        {
-            Destroy(gameObject);
-        }
+        
         if(other.gameObject.tag == "Player"){
             Destroy(gameObject);
             // Get enemy ui
