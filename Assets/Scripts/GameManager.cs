@@ -18,4 +18,12 @@ public class GameManager : MonoBehaviour
         gameState = GAME_STATE.GAME;
         SceneManager.LoadScene(sceneName);
     }
+
+    public void Pause(){
+        Time.timeScale = 0;
+    }
+
+    public void Resume(){
+        Time.timeScale = 1;
+    }
 }

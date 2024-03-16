@@ -122,7 +122,7 @@ public class TileGenerating : MonoBehaviour
             float random = Random.Range(0f, 1f);
             if(random < level_enemyChance() && xGen > 30){
                 Vector3Int cellPosition = tilemap.WorldToCell(posUP);
-                enemyGen.spawnRandomEnemy(cellPosition);
+                enemyGen.spawnRandomEnemy(cellPosition, xGen);
             }
             
             posUP.y -= 1;

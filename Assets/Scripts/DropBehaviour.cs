@@ -7,6 +7,8 @@ public class DropBehaviour : MonoBehaviour
     GameObject player;
     Rigidbody2D rb;
     float speed = 3;
+    [SerializeField] int xpGive = 5;
+    public AudioClip xpSound;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,8 +19,11 @@ public class DropBehaviour : MonoBehaviour
         // Explosion force to rb
         rb = GetComponent<Rigidbody2D>();
         rb.AddForce(randomVector, ForceMode2D.Impulse);
-        Debug.Log(randomVector);
         Destroy(gameObject, 60);
+    }
+
+    public void Initialize(int xp){
+        xpGive = xp;
     }
 
     // Update is called once per frame
@@ -37,6 +42,8 @@ public class DropBehaviour : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.CompareTag("Player") && GameManager.gameState == GameManager.GAME_STATE.GAME){
             other.GetComponent<PlayerStats>().Heal(1);
+            other.GetComponent<PlayerStats>().AddXp(xpGive);
+            GameObject.Find("SoundManager").GetComponent<AudioSource>().PlayOneShot(xpSound);
             Destroy(gameObject);
         }
     }

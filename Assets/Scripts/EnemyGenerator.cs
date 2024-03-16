@@ -10,17 +10,23 @@ public class EnemyGenerator : MonoBehaviour
     void Start(){
         enemyTypes = new Enemy[]{
             new Enemy_Standard(prefabs[0]),
-            new Enemy_Fast(prefabs[0]),
-            new Enemy_Strong(prefabs[0]),
-
             new Enemy_Shooter_Standard(prefabs[1]),
+
+            new Enemy_Fast(prefabs[0]),
             new Enemy_Shooter_Fast(prefabs[1]),
+
+            new Enemy_Strong(prefabs[0]),
             new Enemy_Shooter_Strong(prefabs[1]),
         };
     }
 
-    public void spawnRandomEnemy(Vector3Int coords){
-        spawnEnemy(Random.Range(0, enemyTypes.Length), coords);
+    public void spawnRandomEnemy(Vector3Int coords, int distance){
+        int limit;
+        if (distance < 100) limit = 2;
+        else if(distance < 250) limit = 4;
+        else limit = enemyTypes.Length;
+        
+        spawnEnemy(Random.Range(0, limit), coords);
     }
     public void spawnEnemy(int type, Vector3Int coords){
         var e = Instantiate(enemyTypes[type].enemy, coords, Quaternion.identity);
@@ -32,6 +38,7 @@ public class EnemyGenerator : MonoBehaviour
 public abstract class Enemy
 {
     public GameObject enemy;
+    public int xpDrop = 10;
     public int maxHealth;
     public float speed;
     public float attackSpeed = 3f;
@@ -42,7 +49,7 @@ public abstract class Enemy
     public virtual void Set(GameObject e)
     {
         Debug.Log("Doing Base");
-        e.GetComponent<EnemyStats>().Initialize(maxHealth);
+        e.GetComponent<EnemyStats>().Initialize(maxHealth, xpDrop);
         var behaviourComponent = e.GetComponent<EnemyBehaviour>();
         if (behaviourComponent != null)
         {

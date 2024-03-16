@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Callbacks;
 using UnityEngine;
 
 public class EnemyBehaviour : MonoBehaviour
@@ -18,6 +16,7 @@ public class EnemyBehaviour : MonoBehaviour
     public float range;
     public float attackSpeed;
     public bool canAttack;
+
     // Start is called before the first frame update
     void Start()
     {

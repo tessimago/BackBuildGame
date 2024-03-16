@@ -15,19 +15,22 @@ public class EnemyStats : MonoBehaviour
 
     // Drops
     public GameObject drop;
+    int xpDrop;
+    
     
     // Start is called before the first frame update
     void Start()
     {
     }
 
-    public void Initialize(int maxH){
+    public void Initialize(int maxH, int xpDrop){
         healthBar = GetComponentInChildren<Slider>();
         rb = GetComponent<Rigidbody2D>();
         maxHealth = maxH;
         healthBar.maxValue = maxHealth;
         healthBar.value = maxHealth;
         health = maxHealth;
+        this.xpDrop = xpDrop;
     }
 
     // Update is called once per frame
@@ -42,8 +45,10 @@ public class EnemyStats : MonoBehaviour
         // Apply a knockback force to the enemy
         rb.AddForce(knockback, ForceMode2D.Impulse);
         if(health <= 0){
-            for(int i = 0; i < 3; i++)
-                Instantiate(drop, transform.position, Quaternion.identity);
+            for(int i = 0; i < 3; i++){
+                var d = Instantiate(drop, transform.position, Quaternion.identity);
+                d.GetComponent<DropBehaviour>().Initialize(xpDrop);
+            }
             Destroy(gameObject);
         }
     }
