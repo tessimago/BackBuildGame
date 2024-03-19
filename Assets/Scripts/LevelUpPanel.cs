@@ -1,7 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LevelUpPanel : MonoBehaviour
 {
@@ -46,6 +46,7 @@ public class LevelUpPanel : MonoBehaviour
         Debug.Log("Setting...");
         buttonCard.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = info.name;
         buttonCard.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = info.effect;
+        buttonCard.transform.GetChild(2).GetComponent<Image>().sprite = info.image;
     }
 
     public void ChooseCard(int optionNumber){
@@ -60,7 +61,8 @@ public class LevelUpPanel : MonoBehaviour
         var player_movement = player.GetComponent<PlayerMov>();
 
         player_stats.maxHealth += effect._maxhpInc*player_stats.maxHealth/100;
-        player_stats.health += effect._maxhpInc*player_stats.health/100;
+        if(effect._maxhpInc > 0) // Se aumentou a vida maxima..
+            player_stats.Heal(player_stats.maxHealth/2);
         player_stats.updateBar();
         
         player_shooting.bulletDmg += effect._dmgInc*player_shooting.bulletDmg/100;

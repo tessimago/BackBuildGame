@@ -7,6 +7,7 @@ using System.Collections;
 public class PlayerStats : MonoBehaviour
 {
     public GameObject gameOverScreen;
+    public GameObject pauseScreen;
     public Image healthBar;
     public TextMeshProUGUI healthText;
     public Image xpBar;
@@ -48,7 +49,7 @@ public class PlayerStats : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(GameManager.gameState == GameManager.GAME_STATE.GAME_OVER)
+        if(GameManager.gameState != GameManager.GAME_STATE.GAME)
             return;
 
         score = Mathf.Max((int) transform.position.x - 10, score);
@@ -58,6 +59,9 @@ public class PlayerStats : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.Space)){
             //AddXp(10);
+        }
+        if(Input.GetKeyDown(KeyCode.P)){
+            Pause();
         }
     }
     public void TakeDamage(int damage, Vector2 knockback){
@@ -124,6 +128,15 @@ public class PlayerStats : MonoBehaviour
         gameOverScreen.SetActive(true);
         bestScoreText.text = "Best Score: " + bestScore;
         PlayerPrefs.SetInt("BestScore", score);
+    }
+
+    public void Pause(){
+        gameManag.Pause();
+        pauseScreen.SetActive(true);
+    }
+
+    public void Resume(){
+        pauseScreen.SetActive(false);
     }
 
 }

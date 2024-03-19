@@ -19,10 +19,10 @@ public class ShootingScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(GameManager.gameState == GameManager.GAME_STATE.GAME_OVER)
+        if(GameManager.gameState != GameManager.GAME_STATE.GAME)
             return;
             
-        if(Input.GetMouseButton(0) && canShoot){
+        if((Input.GetMouseButton(0) || Input.GetKey(KeyCode.Space)) && canShoot){
             StartCoroutine(ShootDelay());
         }
     }

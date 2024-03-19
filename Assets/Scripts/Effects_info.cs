@@ -10,6 +10,7 @@ public class Effects_info
     public float _bulletKnockback = 0;
     public int _speedInc = 0;
     public int _maxhpInc = 0;
+    
     public int _spreadShootInc = 0;
 
 }
